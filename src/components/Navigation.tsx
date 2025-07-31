@@ -4,9 +4,9 @@ import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import {  LocaleInfo } from '@/lib/clientLanguages';
+import { Locale } from '@/types';
 
-export default function Navigation({ activeLanguages }: { activeLanguages: LocaleInfo[] }) {
+export default function Navigation({ activeLanguages }: { activeLanguages: Locale[] }) {
   const t = useTranslations('navigation');
   const params = useParams();
   const pathname = usePathname();

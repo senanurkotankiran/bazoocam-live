@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { Inter } from 'next/font/google';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import { getActiveLanguageCodes } from '@/lib/languages';
+import { fetchActiveLanguageCodes } from '@/lib/clientLanguages';
 import dbConnect from '@/lib/mongodb';
 import BlogPost from '@/models/BlogPost';
 import { fetchActiveLanguages } from '@/lib/clientLanguages';
@@ -98,7 +98,7 @@ export default async function LocaleLayout({
   params: { locale: string };
 }) {
   // Get dynamic active locales for validation only
-  const activeLocales = await getActiveLanguageCodes();
+  const activeLocales = await fetchActiveLanguageCodes();
   
   // Validate that the incoming `locale` parameter is valid
   if (!activeLocales.includes(locale)) {

@@ -98,10 +98,7 @@ export async function PUT(
       await renameTranslationFile(oldCode, code);
     }
 
-    // Update config files
-    await updateConfigFiles();
-
-  
+    // Config files are now dynamically read from database, no need to update them
 
     return NextResponse.json({ 
       success: true, 
@@ -163,10 +160,7 @@ export async function DELETE(
     // Delete translation file
     await deleteTranslationFile(language.code);
 
-    // Update config files
-    await updateConfigFiles();
-
-
+    // Config files are now dynamically read from database, no need to update them
 
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -215,132 +209,4 @@ async function deleteTranslationFile(code: string) {
     console.error('Error deleting translation file:', error);
     throw error;
   }
-}
-
-// Helper function to update config files
-async function updateConfigFiles() {
-  try {
-    // Get active languages
-    const activeLanguages = await Language.find({ isActive: true }).lean();
-    const languageCodes = activeLanguages.map(lang => lang.code);
-
-    // Update middleware.ts
-    await updateMiddleware(languageCodes, activeLanguages.find(lang => lang.isDefault)?.code || 'en');
-
-    // Update i18n.ts
-    await updateI18nConfig(languageCodes, activeLanguages.find(lang => lang.isDefault)?.code || 'en');
-
-    // Update types/index.ts
-    await updateTypesFile(activeLanguages);
-
-  } catch (error) {
-    console.error('Error updating config files:', error);
-    throw error;
-  }
-}
-
-// Update middleware.ts
-async function updateMiddleware(locales: string[], defaultLocale: string) {
-  const middlewarePath = path.join(process.cwd(), 'src', 'middleware.ts');
-  const middlewareContent = `import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
-
-const locales = ${JSON.stringify(locales)};
-const defaultLocale = '${defaultLocale}';
-
-export function middleware(request: NextRequest) {
-  // Check if there is any supported locale in the pathname
-  const pathname = request.nextUrl.pathname;
-
-  // Skip middleware for admin, api, static files
-  if (
-    pathname.startsWith('/admin') ||
-    pathname.startsWith('/api') ||
-    pathname.startsWith('/_next') ||
-    pathname.includes('/favicon.ico')
-  ) {
-    return NextResponse.next();
-  }
-
-  // Check if the pathname starts with a locale
-  const localeInPath = locales.find(
-    (locale) => pathname.startsWith(\`/\${locale}/\`) || pathname === \`/\${locale}\`
-  );
-
-  // If there's a locale in path
-  if (localeInPath) {
-    // If it's the default locale, redirect to remove the prefix
-    if (localeInPath === defaultLocale) {
-      const newPath = pathname.slice(3) || '/'; // Remove /locale
-      return NextResponse.redirect(new URL(newPath, request.url));
-    }
-    // For other locales, continue normally
-    return NextResponse.next();
-  }
-
-  // If no locale in path, assume it's the default locale
-  // Rewrite to /defaultLocale internally but don't change the URL
-  const url = request.nextUrl.clone();
-  url.pathname = \`/\${defaultLocale}\${pathname}\`;
-  return NextResponse.rewrite(url);
-}
-
-export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|admin).*)']
-}; 
-`;
-
-  await fs.writeFile(middlewarePath, middlewareContent, 'utf-8');
-}
-
-// Update i18n.ts
-async function updateI18nConfig(locales: string[], defaultLocale: string) {
-  const i18nPath = path.join(process.cwd(), 'src', 'i18n.ts');
-  const i18nContent = `import { notFound } from 'next/navigation'
-import { getRequestConfig } from 'next-intl/server'
-
-const locales = ${JSON.stringify(locales)}
-const defaultLocale = '${defaultLocale}'
-
-export default getRequestConfig(async ({ locale }: { locale?: string }) => {
-  // if locale is missing, use defaultLocale
-  const code = locale ?? defaultLocale
-
-  if (!locales.includes(code)) {
-    notFound()
-  }
-
-  return {
-    locale: code,
-    messages: (await import(\`../messages/\${code}.json\`)).default
-  }
-})
-`;
-
-  await fs.writeFile(i18nPath, i18nContent, 'utf-8');
-}
-
-// Update types/index.ts
-async function updateTypesFile(languages: any[]) {
-  const typesPath = path.join(process.cwd(), 'src', 'types', 'index.ts');
-  
-  // Read current types file
-  const currentContent = await fs.readFile(typesPath, 'utf-8');
-  
-  // Find the supportedLocales export and replace it
-  const supportedLocalesArray = languages.map(lang => 
-    `  { locale: '${lang.code}', name: '${lang.name}', flag: '${lang.flag}' }`
-  ).join(',\n');
-
-  const newSupportedLocales = `export const supportedLocales: Locale[] = [
-${supportedLocalesArray},
-];`;
-
-  // Replace the existing supportedLocales export
-  const updatedContent = currentContent.replace(
-    /export const supportedLocales: Locale\[\] = \[[\s\S]*?\];/,
-    newSupportedLocales
-  );
-
-  await fs.writeFile(typesPath, updatedContent, 'utf-8');
 } 

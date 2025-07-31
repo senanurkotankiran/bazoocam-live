@@ -33,16 +33,14 @@ export async function ensureDefaultLanguagesExist(): Promise<void> {
       await english.save();
       console.log('Created default English language');
       
-      // Clear cache to force refresh
-      clearLanguageCache();
+   
     } else if (!englishLang.isDefault) {
       // Make English default if it exists but not default
       await Language.updateMany({}, { isDefault: false });
       await Language.findByIdAndUpdate(englishLang._id, { isDefault: true });
       console.log('Set English as default language');
       
-      // Clear cache to force refresh
-      clearLanguageCache();
+      
     }
   } catch (error: any) {
     // Ignore duplicate key errors - means language already exists
@@ -112,11 +110,7 @@ export async function getDefaultLanguage(): Promise<string> {
   }
 }
 
-// Clear cache (call this when languages are updated)
-export function clearLanguageCache(): void {
-  cachedLanguages = null;
-  cacheTimestamp = 0;
-}
+
 
 // Get supported locales in the format expected by existing code
 export async function getSupportedLocales(): Promise<LocaleInfo[]> {

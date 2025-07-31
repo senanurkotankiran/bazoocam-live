@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const locales = ["en","fr","es","it","tr"];
+// Default fallback values - these will be used if database is not available
+const defaultLocales = ["en", "fr", "es", "it", "tr"];
 const defaultLocale = 'en';
 
 export function middleware(request: NextRequest) {
@@ -20,6 +21,11 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // For now, use default locales since middleware cannot be async
+  // In production, you might want to use environment variables or a different approach
+  const locales = defaultLocales;
+  const currentDefaultLocale = defaultLocale;
+
   // Check if the pathname starts with a locale
   const localeInPath = locales.find(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
@@ -28,7 +34,7 @@ export function middleware(request: NextRequest) {
   // If there's a locale in path
   if (localeInPath) {
     // If it's the default locale, redirect to remove the prefix
-    if (localeInPath === defaultLocale) {
+    if (localeInPath === currentDefaultLocale) {
       const newPath = pathname.slice(3) || '/'; // Remove /locale
       return NextResponse.redirect(new URL(newPath, request.url));
     }
@@ -39,7 +45,7 @@ export function middleware(request: NextRequest) {
   // If no locale in path, assume it's the default locale
   // Rewrite to /defaultLocale internally but don't change the URL
   const url = request.nextUrl.clone();
-  url.pathname = `/${defaultLocale}${pathname}`;
+  url.pathname = `/${currentDefaultLocale}${pathname}`;
   return NextResponse.rewrite(url);
 }
 

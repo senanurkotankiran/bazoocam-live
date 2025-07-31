@@ -1,13 +1,13 @@
 import { getCache, setCache } from "./cache";
 
-export interface LocaleInfo {
+export interface Locale {
   locale: string;
   name: string;
   flag: string;
 }
 
 // Fetch active languages from API (client-side) without caching
-export async function fetchActiveLanguages(): Promise<LocaleInfo[]> {
+export async function fetchActiveLanguages(): Promise<Locale[]> {
   const cacheKey = 'active-languages';
   const cached = getCache(cacheKey);
   if (cached) {
@@ -50,6 +50,15 @@ export async function fetchActiveLanguages(): Promise<LocaleInfo[]> {
  
 }
 
+// Get language by code
+export function getLanguageByCode(languages: Locale[], code: string): Locale | undefined {
+  return languages.find(lang => lang.locale === code);
+}
+
+// Get default language
+export function getDefaultLanguage(languages: Locale[]): Locale | undefined {
+  return languages.find(lang => lang.locale === 'en') || languages[0];
+}
 // Fetch active language codes only (client-side) without caching
 export async function fetchActiveLanguageCodes(): Promise<string[]> {
   const languages = await fetchActiveLanguages();

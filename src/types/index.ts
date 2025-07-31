@@ -135,4 +135,25 @@ export const supportedLocales: Locale[] = [
   { locale: 'es', name: 'Spanish', flag: '🇪🇸' },
   { locale: 'it', name: 'Italian', flag: '🇮🇹' },
   { locale: 'tr', name: 'Turkish', flag: '🇹🇷' },
-]; 
+];
+
+// Helper function to get active languages from database
+export async function getActiveLanguages(): Promise<Locale[]> {
+  try {
+    const { default: dbConnect } = await import('@/lib/mongodb');
+    const { default: Language } = await import('@/models/Language');
+    
+    await dbConnect();
+    const activeLanguages = await Language.find({ isActive: true }).lean();
+    
+    return activeLanguages.map(lang => ({
+      locale: lang.code,
+      name: lang.name,
+      flag: lang.flag
+    }));
+  } catch (error) {
+    console.error('Error fetching active languages:', error);
+    // Fallback to default locales
+    return supportedLocales;
+  }
+} 
