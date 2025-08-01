@@ -151,6 +151,11 @@ export async function generateMetadata({
       description,
       locale: locale === 'en' ? 'en_US' : `${locale}_${locale.toUpperCase()}`,
     },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+    },
     alternates: {
       canonical,
       languages,
@@ -188,7 +193,7 @@ export default async function HomePage({
   } : null;
 
   // Get JSON-LD data from SEO
-  const seoJsonLd = pageSEO?.jsonLd ? generateJsonLdScript(pageSEO.jsonLd) : null;
+  const seoJsonLd = pageSEO?.jsonLd ? generateJsonLdScript(pageSEO.jsonLd, locale) : null;
 
   return (
     <>

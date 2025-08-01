@@ -82,7 +82,7 @@ export default async function ContactPage({
   
   // Get JSON-LD data
   const pageSEO = await getPageSEO('contact');
-  const jsonLdScript = pageSEO?.jsonLd ? generateJsonLdScript(pageSEO.jsonLd) : null;
+  const jsonLdScript = pageSEO?.jsonLd ? generateJsonLdScript(pageSEO.jsonLd, locale) : null;
 
   return (
     <>

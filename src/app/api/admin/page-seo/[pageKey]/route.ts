@@ -53,7 +53,7 @@ export async function PUT(
     }
 
     if (jsonLd) {
-      updateData.jsonLd = jsonLd;
+      updateData.jsonLd = new Map(Object.entries(jsonLd));
     }
 
     const pageSEO = await PageSEO.findOneAndUpdate(

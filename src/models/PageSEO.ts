@@ -6,7 +6,7 @@ export interface PageSEO {
   title: Map<string, string>; // Multi-language titles
   description: Map<string, string>; // Multi-language descriptions
   keywords: Map<string, string>; // Multi-language keywords
-  jsonLd?: any; // JSON-LD structured data
+  jsonLd: Map<string, any>; // Multi-language JSON-LD structured data
   canonical?: string;
   robots?: string;
   createdAt?: Date;
@@ -35,7 +35,8 @@ const PageSEOSchema = new mongoose.Schema<PageSEO>(
       of: String
     },
     jsonLd: {
-      type: mongoose.Schema.Types.Mixed
+      type: Map,
+      of: mongoose.Schema.Types.Mixed
     },
     canonical: String,
     robots: {

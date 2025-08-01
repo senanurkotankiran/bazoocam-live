@@ -22,61 +22,92 @@ export default function EditPageSEO({ params }: EditPageSEOProps) {
     title: {} as Record<string, string>,
     description: {} as Record<string, string>,
     keywords: {} as Record<string, string>,
-    jsonLd: '',
+    jsonLd: {} as Record<string, string>,
     canonical: '',
     robots: 'index, follow'
   });
 
   useEffect(() => {
-    fetchSupportedLanguages();
+    fetchData();
   }, []);
 
-  const fetchSupportedLanguages = async () => {
+  const fetchData = async () => {
     try {
+      // First fetch supported languages
       const languages = await fetchActiveLanguageCodes();
       setSupportedLocales(languages);
       
-      // Initialize form data for all languages
-      const initialData = {
-        title: Object.fromEntries(languages.map(locale => [locale, ''])),
-        description: Object.fromEntries(languages.map(locale => [locale, ''])),
-        keywords: Object.fromEntries(languages.map(locale => [locale, '']))
-      };
-      
-      setFormData(prev => ({
-        ...prev,
-        ...initialData
-      }));
-
-      // Fetch page SEO data after languages are loaded
-      fetchPageSEO();
+      // Then fetch page SEO data
+      await fetchPageSEO(languages);
     } catch (error) {
-      console.error('Error fetching supported languages:', error);
+      console.error('Error fetching data:', error);
       // Fallback to default languages
       setSupportedLocales(['en', 'fr', 'es', 'it']);
-      fetchPageSEO();
+      await fetchPageSEO(['en', 'fr', 'es', 'it']);
     }
   };
 
-  const fetchPageSEO = async () => {
+  const fetchPageSEO = async (languages: string[]) => {
     try {
       const response = await fetch(`/api/admin/page-seo/${params.pageKey}`);
       const result = await response.json();
       
       if (result.success) {
         const data = result.data;
-        setFormData(prev => ({
+        
+        // Handle both Map objects and plain objects
+        const title = data.title ? (data.title instanceof Map ? Object.fromEntries(data.title) : data.title) : Object.fromEntries(languages.map(locale => [locale, '']));
+        const description = data.description ? (data.description instanceof Map ? Object.fromEntries(data.description) : data.description) : Object.fromEntries(languages.map(locale => [locale, '']));
+        const keywords = data.keywords ? (data.keywords instanceof Map ? Object.fromEntries(data.keywords) : data.keywords) : Object.fromEntries(languages.map(locale => [locale, '']));
+        
+        // Handle JSON-LD conversion - convert from Map to Record and stringify each language's JSON
+        let jsonLd: Record<string, string> = {};
+        if (data.jsonLd) {
+          const jsonLdData = data.jsonLd instanceof Map ? Object.fromEntries(data.jsonLd) : data.jsonLd;
+          for (const [locale, value] of Object.entries(jsonLdData)) {
+            jsonLd[locale] = typeof value === 'string' ? value : JSON.stringify(value, null, 2);
+          }
+        } else {
+          jsonLd = Object.fromEntries(languages.map(locale => [locale, '']));
+        }
+        
+        const newFormData = {
           pageKey: data.pageKey,
-          title: data.title || Object.fromEntries(supportedLocales.map(locale => [locale, ''])),
-          description: data.description || Object.fromEntries(supportedLocales.map(locale => [locale, ''])),
-          keywords: data.keywords || Object.fromEntries(supportedLocales.map(locale => [locale, ''])),
-          jsonLd: data.jsonLd ? JSON.stringify(data.jsonLd, null, 2) : '',
+          title,
+          description,
+          keywords,
+          jsonLd,
           canonical: data.canonical || '',
           robots: data.robots || 'index, follow'
-        }));
+        };
+        
+        setFormData(newFormData);
+      } else {
+        // If page doesn't exist, initialize with empty data for all languages
+        const emptyData = {
+          pageKey: params.pageKey,
+          title: Object.fromEntries(languages.map(locale => [locale, ''])),
+          description: Object.fromEntries(languages.map(locale => [locale, ''])),
+          keywords: Object.fromEntries(languages.map(locale => [locale, ''])),
+          jsonLd: Object.fromEntries(languages.map(locale => [locale, ''])),
+          canonical: '',
+          robots: 'index, follow'
+        };
+        setFormData(emptyData);
       }
     } catch (error) {
       console.error('Error fetching page SEO:', error);
+      // Initialize with empty data on error
+      const emptyData = {
+        pageKey: params.pageKey,
+        title: Object.fromEntries(languages.map(locale => [locale, ''])),
+        description: Object.fromEntries(languages.map(locale => [locale, ''])),
+        keywords: Object.fromEntries(languages.map(locale => [locale, ''])),
+        jsonLd: Object.fromEntries(languages.map(locale => [locale, ''])),
+        canonical: '',
+        robots: 'index, follow'
+      };
+      setFormData(emptyData);
     } finally {
       setFetching(false);
     }
@@ -104,9 +135,23 @@ export default function EditPageSEO({ params }: EditPageSEOProps) {
     setLoading(true);
 
     try {
+      // Parse JSON-LD data for each language
+      const parsedJsonLd: Record<string, any> = {};
+      for (const [locale, jsonString] of Object.entries(formData.jsonLd)) {
+        if (jsonString.trim()) {
+          try {
+            parsedJsonLd[locale] = JSON.parse(jsonString);
+          } catch (error) {
+            alert(`${locale.toUpperCase()} dilindeki JSON-LD verisi geçersiz JSON formatında. Lütfen kontrol edin.`);
+            setLoading(false);
+            return;
+          }
+        }
+      }
+
       const payload = {
         ...formData,
-        jsonLd: formData.jsonLd ? JSON.parse(formData.jsonLd) : null
+        jsonLd: parsedJsonLd
       };
 
       const response = await fetch(`/api/admin/page-seo/${params.pageKey}`, {
@@ -268,29 +313,25 @@ export default function EditPageSEO({ params }: EditPageSEOProps) {
                     placeholder="video chat, live chat, webcam"
                   />
                 </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    JSON-LD Structured Data
+                  </label>
+                  <textarea
+                    value={formData.jsonLd[locale] || ''}
+                    onChange={(e) => handleLocaleChange('jsonLd', locale, e.target.value)}
+                    rows={8}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 font-mono text-sm"
+                    placeholder="JSON-LD structured data..."
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    JSON formatında olmalıdır. Her dil için ayrı JSON-LD verisi ekleyebilirsiniz.
+                  </p>
+                </div>
               </div>
             </div>
           ))}
-        </div>
-
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4">JSON-LD Structured Data</h2>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              JSON-LD (Schema.org)
-            </label>
-            <textarea
-              value={formData.jsonLd}
-              onChange={(e) => handleInputChange('jsonLd', e.target.value)}
-              rows={15}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 font-mono text-sm"
-              placeholder="JSON-LD structured data..."
-            />
-            <p className="text-xs text-gray-500 mt-1">
-              JSON formatında olmalıdır.
-            </p>
-          </div>
         </div>
 
         <div className="flex justify-end space-x-4">

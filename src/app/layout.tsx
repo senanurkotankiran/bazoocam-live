@@ -23,28 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
   languages['x-default'] = 'https://www.bazoocam.live';
 
   return {
-    title: 'Bazoocam Live - Best Video Chat Applications',
-    description: 'Discover the best live video chat applications and platforms. Find perfect alternatives to popular chat apps.',
-    keywords: 'video chat, live chat, webcam chat, random chat, chatroulette, omegle alternatives',
-    authors: [{ name: 'Bazoocam Live' }],
-    creator: 'Bazoocam Live',
-    publisher: 'Bazoocam Live',
-    robots: 'index, follow',
-    openGraph: {
-      type: 'website',
-      locale: 'en_US',
-      url: 'https://www.bazoocam.live',
-      siteName: 'Bazoocam Live',
-      title: 'Bazoocam Live - Best Video Chat Applications',
-      description: 'Discover the best live video chat applications and platforms. Find perfect alternatives to popular chat apps.',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: 'Bazoocam Live - Best Video Chat Applications',
-      description: 'Discover the best live video chat applications and platforms. Find perfect alternatives to popular chat apps.',
-    },
     alternates: {
-      canonical: 'https://www.bazoocam.live',
       languages,
     },
   };

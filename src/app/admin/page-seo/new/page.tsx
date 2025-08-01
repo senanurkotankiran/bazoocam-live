@@ -7,30 +7,164 @@ import { fetchActiveLanguageCodes } from '@/lib/clientLanguages';
 
 const defaultJsonLdTemplates = {
   homepage: {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Bazoocam Live",
-    "url": "https://www.bazoocam.live",
-    "description": "En iyi video sohbet uygulamalarını keşfedin",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://www.bazoocam.live/search?q={search_term_string}",
-      "query-input": "required name=search_term_string"
+    en: {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Bazoocam Live",
+      "url": "https://www.bazoocam.live",
+      "description": "Discover the best video chat applications and platforms",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://www.bazoocam.live/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
+    fr: {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Bazoocam Live",
+      "url": "https://www.bazoocam.live",
+      "description": "Découvrez les meilleures applications de chat vidéo",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://www.bazoocam.live/fr/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
+    es: {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Bazoocam Live",
+      "url": "https://www.bazoocam.live",
+      "description": "Descubre las mejores aplicaciones de chat de vídeo",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://www.bazoocam.live/es/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
+    it: {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Bazoocam Live",
+      "url": "https://www.bazoocam.live",
+      "description": "Scopri le migliori applicazioni di chat video",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://www.bazoocam.live/it/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
     }
   },
   contact: {
-    "@context": "https://schema.org",
-    "@type": "ContactPage",
-    "name": "İletişim - Bazoocam Live",
-    "url": "https://www.bazoocam.live/contact",
-    "description": "Bizimle iletişime geçin"
+    en: {
+      "@context": "https://schema.org",
+      "@type": "ContactPage",
+      "name": "Contact Us - Bazoocam Live",
+      "url": "https://www.bazoocam.live/contact",
+      "description": "Get in touch with our team for support and inquiries"
+    },
+    fr: {
+      "@context": "https://schema.org",
+      "@type": "ContactPage",
+      "name": "Contactez-nous - Bazoocam Live",
+      "url": "https://www.bazoocam.live/fr/contact",
+      "description": "Contactez notre équipe pour obtenir du support"
+    },
+    es: {
+      "@context": "https://schema.org",
+      "@type": "ContactPage",
+      "name": "Contáctanos - Bazoocam Live",
+      "url": "https://www.bazoocam.live/es/contact",
+      "description": "Póngase en contacto con nuestro equipo"
+    },
+    it: {
+      "@context": "https://schema.org",
+      "@type": "ContactPage",
+      "name": "Contattaci - Bazoocam Live",
+      "url": "https://www.bazoocam.live/it/contact",
+      "description": "Contatta il nostro team per supporto"
+    }
   },
   privacy: {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "Gizlilik Politikası - Bazoocam Live",
-    "url": "https://www.bazoocam.live/privacy",
-    "description": "Gizlilik politikamızı okuyun"
+    en: {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Privacy Policy - Bazoocam Live",
+      "url": "https://www.bazoocam.live/privacy",
+      "description": "Read our privacy policy to understand how we protect your data"
+    },
+    fr: {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Politique de Confidentialité - Bazoocam Live",
+      "url": "https://www.bazoocam.live/fr/privacy",
+      "description": "Lisez notre politique de confidentialité"
+    },
+    es: {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Política de Privacidad - Bazoocam Live",
+      "url": "https://www.bazoocam.live/es/privacy",
+      "description": "Lee nuestra política de privacidad"
+    },
+    it: {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Politica sulla Privacy - Bazoocam Live",
+      "url": "https://www.bazoocam.live/it/privacy",
+      "description": "Leggi la nostra politica sulla privacy"
+    }
+  },
+  apps: {
+    en: {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Video Chat Applications - Bazoocam Live",
+      "url": "https://www.bazoocam.live/apps",
+      "description": "Explore all available video chat applications and platforms",
+      "mainEntity": {
+        "@type": "ItemList",
+        "name": "Video Chat Applications",
+        "description": "A comprehensive list of video chat applications and platforms"
+      }
+    },
+    fr: {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Applications de Chat Vidéo - Bazoocam Live",
+      "url": "https://www.bazoocam.live/fr/apps",
+      "description": "Explorez toutes les applications de chat vidéo disponibles",
+      "mainEntity": {
+        "@type": "ItemList",
+        "name": "Applications de Chat Vidéo",
+        "description": "Une liste complète des applications de chat vidéo"
+      }
+    },
+    es: {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Aplicaciones de Chat de Vídeo - Bazoocam Live",
+      "url": "https://www.bazoocam.live/es/apps",
+      "description": "Explora todas las aplicaciones de chat de vídeo disponibles",
+      "mainEntity": {
+        "@type": "ItemList",
+        "name": "Aplicaciones de Chat de Vídeo",
+        "description": "Una lista completa de aplicaciones de chat de vídeo"
+      }
+    },
+    it: {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Applicazioni di Chat Video - Bazoocam Live",
+      "url": "https://www.bazoocam.live/it/apps",
+      "description": "Esplora tutte le applicazioni di chat video disponibili",
+      "mainEntity": {
+        "@type": "ItemList",
+        "name": "Applicazioni di Chat Video",
+        "description": "Una lista completa delle applicazioni di chat video"
+      }
+    }
   }
 };
 
@@ -43,7 +177,7 @@ export default function NewPageSEO() {
     title: {} as Record<string, string>,
     description: {} as Record<string, string>,
     keywords: {} as Record<string, string>,
-    jsonLd: '',
+    jsonLd: {} as Record<string, string>,
     canonical: '',
     robots: 'index, follow'
   });
@@ -61,7 +195,8 @@ export default function NewPageSEO() {
       const initialData = {
         title: Object.fromEntries(languages.map(locale => [locale, ''])),
         description: Object.fromEntries(languages.map(locale => [locale, ''])),
-        keywords: Object.fromEntries(languages.map(locale => [locale, '']))
+        keywords: Object.fromEntries(languages.map(locale => [locale, ''])),
+        jsonLd: Object.fromEntries(languages.map(locale => [locale, '']))
       };
       
       setFormData(prev => ({
@@ -93,11 +228,24 @@ export default function NewPageSEO() {
   };
 
   const loadJsonLdTemplate = (pageKey: string) => {
-    const template = defaultJsonLdTemplates[pageKey as keyof typeof defaultJsonLdTemplates];
-    if (template) {
+    const pageTemplates = defaultJsonLdTemplates[pageKey as keyof typeof defaultJsonLdTemplates];
+    if (pageTemplates) {
+      // Set the template for all supported languages
+      const updatedJsonLd: Record<string, string> = {};
+      supportedLocales.forEach(lang => {
+        const template = (pageTemplates as any)[lang];
+        if (template) {
+          updatedJsonLd[lang] = JSON.stringify(template, null, 2);
+        } else {
+          // Fallback to English template if language-specific template doesn't exist
+          const fallbackTemplate = (pageTemplates as any)['en'];
+          updatedJsonLd[lang] = fallbackTemplate ? JSON.stringify(fallbackTemplate, null, 2) : '';
+        }
+      });
+      
       setFormData(prev => ({
         ...prev,
-        jsonLd: JSON.stringify(template, null, 2)
+        jsonLd: updatedJsonLd
       }));
     }
   };
@@ -107,9 +255,23 @@ export default function NewPageSEO() {
     setLoading(true);
 
     try {
+      // Parse JSON-LD data for each language
+      const parsedJsonLd: Record<string, any> = {};
+      for (const [locale, jsonString] of Object.entries(formData.jsonLd)) {
+        if (jsonString.trim()) {
+          try {
+            parsedJsonLd[locale] = JSON.parse(jsonString);
+          } catch (error) {
+            alert(`${locale.toUpperCase()} dilindeki JSON-LD verisi geçersiz JSON formatında. Lütfen kontrol edin.`);
+            setLoading(false);
+            return;
+          }
+        }
+      }
+
       const payload = {
         ...formData,
-        jsonLd: formData.jsonLd ? JSON.parse(formData.jsonLd) : null
+        jsonLd: parsedJsonLd
       };
 
       const response = await fetch('/api/admin/page-seo', {
@@ -129,7 +291,7 @@ export default function NewPageSEO() {
       }
     } catch (error) {
       console.error('Error creating page SEO:', error);
-      alert('Kaydetme sırasında hata oluştu');
+      alert('Oluşturma sırasında hata oluştu');
     } finally {
       setLoading(false);
     }
@@ -168,7 +330,7 @@ export default function NewPageSEO() {
                 value={formData.pageKey}
                 onChange={(e) => {
                   handleInputChange('pageKey', e.target.value);
-                  loadJsonLdTemplate(e.target.value);
+                  loadJsonLdTemplate(e.target.value); // Default to English for now
                 }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
                 required
@@ -179,6 +341,7 @@ export default function NewPageSEO() {
                 <option value="privacy">Gizlilik</option>
                 <option value="terms">Kullanım Şartları</option>
                 <option value="about">Hakkımızda</option>
+                <option value="apps">Uygulamalar</option>
               </select>
             </div>
 
@@ -263,29 +426,25 @@ export default function NewPageSEO() {
                     placeholder="video chat, live chat, webcam"
                   />
                 </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    JSON-LD Structured Data
+                  </label>
+                  <textarea
+                    value={formData.jsonLd[locale] || ''}
+                    onChange={(e) => handleLocaleChange('jsonLd', locale, e.target.value)}
+                    rows={8}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 font-mono text-sm"
+                    placeholder="JSON-LD structured data..."
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    JSON formatında olmalıdır. Her dil için ayrı JSON-LD verisi ekleyebilirsiniz.
+                  </p>
+                </div>
               </div>
             </div>
           ))}
-        </div>
-
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4">JSON-LD Structured Data</h2>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              JSON-LD (Schema.org)
-            </label>
-            <textarea
-              value={formData.jsonLd}
-              onChange={(e) => handleInputChange('jsonLd', e.target.value)}
-              rows={15}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 font-mono text-sm"
-              placeholder="JSON-LD structured data..."
-            />
-            <p className="text-xs text-gray-500 mt-1">
-              Sayfa seçildiğinde otomatik şablon yüklenecektir. JSON formatında olmalıdır.
-            </p>
-          </div>
         </div>
 
         <div className="flex justify-end space-x-4">

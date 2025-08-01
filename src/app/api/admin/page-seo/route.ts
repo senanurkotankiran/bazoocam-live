@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
       title: new Map(Object.entries(title)),
       description: new Map(Object.entries(description)),
       keywords: keywords ? new Map(Object.entries(keywords)) : undefined,
-      jsonLd,
+      jsonLd: jsonLd ? new Map(Object.entries(jsonLd)) : undefined,
       canonical,
       robots
     });

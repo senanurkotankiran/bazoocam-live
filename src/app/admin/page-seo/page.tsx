@@ -55,7 +55,8 @@ export default function PageSEOManagement() {
     'contact': 'İletişim',
     'privacy': 'Gizlilik',
     'terms': 'Kullanım Şartları',
-    'about': 'Hakkımızda'
+    'about': 'Hakkımızda',
+    'apps': 'Uygulamalar'
   };
 
   if (loading) {

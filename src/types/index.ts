@@ -114,7 +114,7 @@ export interface PageSEO {
   title: Record<string, string>; // Multi-language titles
   description: Record<string, string>; // Multi-language descriptions
   keywords?: Record<string, string>; // Multi-language keywords
-  jsonLd?: any; // JSON-LD structured data
+  jsonLd?: Record<string, any>; // Multi-language JSON-LD structured data
   canonical?: string;
   robots?: string;
   createdAt?: Date;

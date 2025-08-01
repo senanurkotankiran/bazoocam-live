@@ -26,9 +26,24 @@ export async function getPageSEO(pageKey: string): Promise<PageSEOType | null> {
   }
 }
 
-export function generateJsonLdScript(jsonLd: any): string {
+export function generateJsonLdScript(jsonLd: any, locale: string = 'en'): string {
   if (!jsonLd) return '';
   
+  // Handle multi-language JSON-LD
+  if (typeof jsonLd === 'object' && !Array.isArray(jsonLd)) {
+    // Check if it's a multi-language structure
+    if (jsonLd[locale]) {
+      return JSON.stringify(jsonLd[locale]);
+    } else if (jsonLd['en']) {
+      // Fallback to English
+      return JSON.stringify(jsonLd['en']);
+    } else {
+      // If no language-specific data, try to use the object as-is
+      return JSON.stringify(jsonLd);
+    }
+  }
+  
+  // Handle legacy single JSON-LD format
   return JSON.stringify(jsonLd);
 }
 

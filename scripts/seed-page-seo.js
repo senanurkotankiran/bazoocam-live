@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-require('dotenv').config({ path: '.env' });
+require('dotenv').config({ path: '.env.local' });
 
 // Connect to MongoDB
 async function connectDB() {
@@ -176,6 +176,49 @@ const samplePageSEOData = [
       "inLanguage": "en-US"
     },
     canonical: 'https://www.bazoocam.live/privacy',
+    robots: 'index, follow'
+  },
+  {
+    pageKey: 'apps',
+    title: new Map([
+      ['en', 'Video Chat Applications - Bazoocam Live'],
+      ['fr', 'Applications de Chat Vidéo - Bazoocam Live'],
+      ['es', 'Aplicaciones de Chat de Vídeo - Bazoocam Live'],
+      ['it', 'Applicazioni di Chat Video - Bazoocam Live'],
+      ['tr', 'Video Sohbet Uygulamaları - Bazoocam Live']
+    ]),
+    description: new Map([
+      ['en', 'Explore all available video chat applications and platforms. Find the best alternatives to popular chat apps and discover new video chat experiences.'],
+      ['fr', 'Explorez toutes les applications de chat vidéo disponibles. Trouvez les meilleures alternatives aux applications de chat populaires et découvrez de nouvelles expériences de chat vidéo.'],
+      ['es', 'Explora todas las aplicaciones de chat de vídeo disponibles. Encuentra las mejores alternativas a las aplicaciones de chat populares y descubre nuevas experiencias de chat de vídeo.'],
+      ['it', 'Esplora tutte le applicazioni di chat video disponibili. Trova le migliori alternative alle app di chat popolari e scopri nuove esperienze di chat video.'],
+      ['tr', 'Tüm mevcut video sohbet uygulamalarını ve platformlarını keşfedin. Popüler sohbet uygulamalarının en iyi alternatiflerini bulun ve yeni video sohbet deneyimleri keşfedin.']
+    ]),
+    keywords: new Map([
+      ['en', 'video chat apps, chat applications, video chat platforms, random chat, live chat, webcam chat, chatroulette alternatives'],
+      ['fr', 'applications de chat vidéo, applications de chat, plateformes de chat vidéo, chat aléatoire, chat en direct, chat webcam, alternatives chatroulette'],
+      ['es', 'aplicaciones de chat de vídeo, aplicaciones de chat, plataformas de chat de vídeo, chat aleatorio, chat en vivo, chat con cámara web, alternativas chatroulette'],
+      ['it', 'applicazioni di chat video, applicazioni di chat, piattaforme di chat video, chat casuale, chat dal vivo, chat webcam, alternative chatroulette'],
+      ['tr', 'video sohbet uygulamaları, sohbet uygulamaları, video sohbet platformları, rastgele sohbet, canlı sohbet, web kamera sohbet, chatroulette alternatifleri']
+    ]),
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Video Chat Applications - Bazoocam Live",
+      "url": "https://www.bazoocam.live/apps",
+      "description": "Explore all available video chat applications and platforms",
+      "mainEntity": {
+        "@type": "ItemList",
+        "name": "Video Chat Applications",
+        "description": "A comprehensive list of video chat applications and platforms"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Bazoocam Live",
+        "url": "https://www.bazoocam.live"
+      }
+    },
+    canonical: 'https://www.bazoocam.live/apps',
     robots: 'index, follow'
   }
 ];

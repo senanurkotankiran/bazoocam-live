@@ -20,6 +20,48 @@ export default function JsonLdScript({ post, locale }: JsonLdScriptProps) {
       .trim();
   };
 
+  // Helper function to get localized URL
+  const getLocalizedUrl = (path: string) => {
+    const baseUrl = 'https://www.bazoocam.live';
+    return locale === 'en' ? `${baseUrl}${path}` : `${baseUrl}/${locale}${path}`;
+  };
+
+  // Helper function to get localized navigation text
+  const getLocalizedText = (key: string) => {
+    const translations: Record<string, Record<string, string>> = {
+      home: {
+        en: 'Home',
+        tr: 'Ana Sayfa',
+        fr: 'Accueil',
+        es: 'Inicio',
+        it: 'Home',
+        de: 'Startseite',
+        pt: 'Início',
+        ru: 'Главная',
+        ar: 'الرئيسية',
+        ja: 'ホーム',
+        ko: '홈',
+        zh: '首页'
+      },
+      apps: {
+        en: 'Apps',
+        tr: 'Uygulamalar',
+        fr: 'Applications',
+        es: 'Aplicaciones',
+        it: 'App',
+        de: 'Apps',
+        pt: 'Aplicativos',
+        ru: 'Приложения',
+        ar: 'التطبيقات',
+        ja: 'アプリ',
+        ko: '앱',
+        zh: '应用'
+      }
+    };
+
+    return translations[key]?.[locale] || translations[key]?.['en'] || key;
+  };
+
   // Article Schema
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -43,11 +85,17 @@ export default function JsonLdScript({ post, locale }: JsonLdScriptProps) {
     dateModified: post.updatedAt,
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://www.bazoocam.live${locale === 'en' ? '' : `/${locale}`}/apps/${post.slug}.html`
-    }
+      '@id': getLocalizedUrl(`/apps/${post.slug}.html`)
+    },
+    // Add article section if category exists
+    ...(post.categoryId?.name && {
+      articleSection: typeof post.categoryId.name === 'string' 
+        ? post.categoryId.name 
+        : (post.categoryId.name[locale] || post.categoryId.name['en'] || '')
+    })
   };
 
-  // FAQ Schema
+  // FAQ Schema - Only include if FAQs exist and are localized
   const faqSchema = post.faqs && post.faqs.length > 0 ? {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
@@ -61,23 +109,23 @@ export default function JsonLdScript({ post, locale }: JsonLdScriptProps) {
     }))
   } : null;
 
-  // Breadcrumb Schema
+  // Breadcrumb Schema with localized URLs and names
   const breadcrumbItems = [
     {
       '@type': 'ListItem',
       position: 1,
-      name: 'Home',
-      item: `https://www.bazoocam.live${locale === 'en' ? '' : `/${locale}`}`
+      name: getLocalizedText('home'),
+      item: getLocalizedUrl('')
     },
     {
       '@type': 'ListItem',
       position: 2,
-      name: 'Apps',
-      item: `https://www.bazoocam.live${locale === 'en' ? '' : `/${locale}`}/apps/`
+      name: getLocalizedText('apps'),
+      item: getLocalizedUrl('/apps/')
     }
   ];
 
-  // Add category if it exists
+  // Add category if it exists with localized name
   if (post.categoryId?.name) {
     const categoryName = typeof post.categoryId.name === 'string' 
       ? post.categoryId.name 
@@ -87,17 +135,17 @@ export default function JsonLdScript({ post, locale }: JsonLdScriptProps) {
     breadcrumbItems.push({
       '@type': 'ListItem',
       position: 3,
-      name: categorySlug,
-      item: `https://www.bazoocam.live${locale === 'en' ? '' : `/${locale}`}/apps/${categoryDisplayName}`
+      name: categoryName, // Use localized category name
+      item: getLocalizedUrl(`/apps/${categorySlug}`)
     });
   }
 
-  // Add the current blog post
+  // Add the current blog post with localized title
   breadcrumbItems.push({
     '@type': 'ListItem',
     position: breadcrumbItems.length + 1,
-    name: title,
-    item: `https://www.bazoocam.live${locale === 'en' ? '' : `/${locale}`}/apps/${post.slug}.html`
+    name: title, // Use localized title
+    item: getLocalizedUrl(`/apps/${post.slug}.html`)
   });
 
   const breadcrumbSchema = {
@@ -117,6 +165,78 @@ export default function JsonLdScript({ post, locale }: JsonLdScriptProps) {
       // Add social media URLs here when available
     ]
   };
+
+  // WebSite Schema with localized URLs
+  const websiteSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Bazoocam Live',
+    url: getLocalizedUrl(''),
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: getLocalizedUrl('/search?q={search_term_string}')
+      },
+      'query-input': 'required name=search_term_string'
+    }
+  };
+
+  // bu şemalar bir uygulamayı, yazılımı veya cihazı ürün gibi tanıtıyorsan kullanılır.
+  // Product Schema for the app being reviewed
+/*   const productSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: title,
+    description: description,
+    image: post.imageUrl || undefined,
+    url: getLocalizedUrl(`/apps/${post.slug}.html`),
+    ...(post.rating && {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: post.rating.stars,
+        reviewCount: post.rating.votes,
+        bestRating: 5,
+        worstRating: 1
+      }
+    }),
+    ...(post.categoryId?.name && {
+      category: typeof post.categoryId.name === 'string' 
+        ? post.categoryId.name 
+        : (post.categoryId.name[locale] || post.categoryId.name['en'] || '')
+    })
+  };
+
+  // Review Schema for the app
+  const reviewSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Review',
+    itemReviewed: {
+      '@type': 'Product',
+      name: title
+    },
+    reviewBody: description,
+    author: {
+      '@type': 'Organization',
+      name: 'Bazoocam Live'
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Bazoocam Live'
+    },
+    ...(post.rating && {
+      reviewRating: {
+        '@type': 'Rating',
+        ratingValue: post.rating.stars,
+        bestRating: 5,
+        worstRating: 1
+      }
+    }),
+    datePublished: post.createdAt,
+    dateModified: post.updatedAt
+  };
+ */
+
 
   return (
     <>
@@ -146,6 +266,14 @@ export default function JsonLdScript({ post, locale }: JsonLdScriptProps) {
           __html: JSON.stringify(organizationSchema),
         }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(websiteSchema),
+        }}
+      />
+   
+   
     </>
   );
 } 

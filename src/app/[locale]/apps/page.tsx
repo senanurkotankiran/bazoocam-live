@@ -7,6 +7,8 @@ import { getActiveLanguages } from '@/lib/languages';
 import StartChatButton from '@/components/StartChatButton';
 import Hero from '@/components/Hero';
 import ChatModal from '@/components/ChatModal';
+import { getPageSEO } from '@/lib/seo';
+import { generateJsonLdScript } from '@/lib/seo';
 
 export async function generateMetadata({
   params: { locale }
@@ -16,8 +18,18 @@ export async function generateMetadata({
   // Get translations for metadata
   const appsT = await getTranslations({ locale, namespace: 'apps' });
   
-  const title = appsT('title') || 'Video Chat Applications - Bazoocam Live';
-  const description = appsT('subtitle') || 'Explore all available video chat applications and platforms';
+  // Try to get SEO data from database first
+  const pageSEO = await getPageSEO('apps');
+  
+  let title = appsT('title') || 'Video Chat Applications - Bazoocam Live';
+  let description = appsT('subtitle') || 'Explore all available video chat applications and platforms';
+  
+  // Use database SEO data if available
+  if (pageSEO) {
+    title = pageSEO.title?.[locale] || pageSEO.title?.en || title;
+    description = pageSEO.description?.[locale] || pageSEO.description?.en || description;
+  }
+  
   const canonical = `https://www.bazoocam.live${locale === 'en' ? '' : `/${locale}`}/apps/`;
 
   // Get dynamic languages for alternates
@@ -88,10 +100,20 @@ export default async function AppsPage({
 }) {
   const appsT = await getTranslations({ locale, namespace: 'apps' });
   const posts = await getPublishedPostsForLocale(locale);
-
+  const pageSEO = await getPageSEO('apps');
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 antialiased">
+      {/* JSON-LD Structured Data */}
+      {pageSEO?.jsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: generateJsonLdScript(pageSEO.jsonLd, locale)
+          }}
+        />
+      )}
+      
       {/* Header Section with Background Image */}
       <div className="w-full bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(/uploads/bg5.png)` }}>
         <div className="py-32 bg-[#02040a66]/40">
