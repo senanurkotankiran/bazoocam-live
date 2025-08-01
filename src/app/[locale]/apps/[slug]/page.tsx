@@ -244,6 +244,11 @@ export default async function BlogPostPage({ params }: Props) {
               <div className="prose prose-sm max-w-none mb-12 leading-relaxed">
                 <div dangerouslySetInnerHTML={{ __html: cleanLinksFromHtml(content) }} />
               </div>
+              {post.author && (
+            <div className="flex text-sm text-gray-600 mb-4 items-center justify-end">
+              <span className="text-gray-500">By:</span> {post.author}
+            </div>
+          )}
 
               {/* Pros and Cons */}
               {post.prosAndCons && (

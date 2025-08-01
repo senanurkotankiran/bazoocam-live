@@ -54,6 +54,7 @@ const BlogPostSchema = new mongoose.Schema<BlogPost>(
       required: true
     },
     imageUrl: String,
+    author: String, // Blog yazarı
     categoryId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Category',

@@ -100,7 +100,7 @@ export async function POST(request: NextRequest) {
     await dbConnect();
     
     const body = await request.json();
-    const { title, content, description, imageUrl, categoryId, status, meta, faqs, alternatives, alternativesDescription, prosAndCons, rating } = body;
+    const { title, content, description, imageUrl, author, categoryId, status, meta, faqs, alternatives, alternativesDescription, prosAndCons, rating } = body;
     
     // Generate slug from provided slug or English title
     let slug = body.slug;
@@ -127,6 +127,7 @@ export async function POST(request: NextRequest) {
       content: new Map(Object.entries(content)),
       description: new Map(Object.entries(description)),
       imageUrl,
+      author: author || null,
       categoryId: categoryId || null,
       status: status || 'draft'
     };

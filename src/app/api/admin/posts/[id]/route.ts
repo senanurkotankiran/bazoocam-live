@@ -115,7 +115,7 @@ export async function PUT(
     await dbConnect();
     
     const body = await request.json();
-    const { title, content, description, imageUrl, categoryId, status, meta, faqs, alternatives, alternativesDescription, prosAndCons, rating, slug } = body;
+    const { title, content, description, imageUrl, author, categoryId, status, meta, faqs, alternatives, alternativesDescription, prosAndCons, rating, slug } = body;
 
     // Check if slug is being changed and if it already exists
     if (slug) {
@@ -133,6 +133,7 @@ export async function PUT(
       content: new Map(Object.entries(content)),
       description: new Map(Object.entries(description)),
       imageUrl,
+      author: author || null,
       categoryId: categoryId || null,
       status,
       slug

@@ -199,14 +199,17 @@ async function deleteTranslationFile(code: string) {
     const messagesDir = path.join(process.cwd(), 'messages');
     const filePath = path.join(messagesDir, `${code}.json`);
 
-    try {
-      await fs.unlink(filePath);
-      console.log(`Deleted translation file: ${code}.json`);
-    } catch (error) {
-      console.log(`Translation file ${code}.json not found, skipping deletion`);
-    }
+    // Prevent deletion of JSON files in messages directory
+    // try {
+    //   await fs.unlink(filePath);
+    //   console.log(`Deleted translation file: ${code}.json`);
+    // } catch (error) {
+    //   console.log(`Translation file ${code}.json not found, skipping deletion`);
+    // }
+    
+    console.log(`Skipping deletion of translation file: ${code}.json (preserved in messages directory)`);
   } catch (error) {
-    console.error('Error deleting translation file:', error);
+    console.error('Error in deleteTranslationFile:', error);
     throw error;
   }
 } 

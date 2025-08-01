@@ -70,8 +70,8 @@ export default function JsonLdScript({ post, locale }: JsonLdScriptProps) {
     description: description,
     image: post.imageUrl || undefined,
     author: {
-      '@type': 'Organization',
-      name: 'Bazoocam Live'
+      '@type': post.author ? 'Person' : 'Organization',
+      name: post.author || 'Bazoocam Live'
     },
     publisher: {
       '@type': 'Organization',

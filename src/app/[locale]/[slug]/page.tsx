@@ -30,6 +30,7 @@ interface BlogPost {
   description: string;
   content: string;
   imageUrl?: string;
+  author?: string; // Blog yazarı
   createdAt: string;
   updatedAt: string;
   rating?: {
@@ -150,8 +151,8 @@ function generateArticleSchema(posts: BlogPost[], category: CategoryData, locale
     "datePublished": post.createdAt,
     "dateModified": post.updatedAt,
     "author": {
-      "@type": "Organization",
-      "name": "Bazoocam Live"
+      "@type": post.author ? "Person" : "Organization",
+      "name": post.author || "Bazoocam Live"
     },
     "publisher": {
       "@type": "Organization",
@@ -297,15 +298,23 @@ export default async function CategoryPage({ params, searchParams }: Props) {
                   <div className="p-6">
                     {/* Meta Info */}
                     <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
-                      <div className="flex items-center">
-                        <CalendarIcon className="h-4 w-4 mr-1" />
-                        <time dateTime={post.createdAt}>
-                          {new Date(post.createdAt).toLocaleDateString(locale, {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
-                          })}
-                        </time>
+                      <div className="flex items-center space-x-4">
+                        <div className="flex items-center">
+                          <CalendarIcon className="h-4 w-4 mr-1" />
+                          <time dateTime={post.createdAt}>
+                            {new Date(post.createdAt).toLocaleDateString(locale, {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric'
+                            })}
+                          </time>
+                        </div>
+                        {post.author && (
+                          <div className="flex items-center">
+                            <span className="text-gray-400">•</span>
+                            <span className="ml-1">{post.author}</span>
+                          </div>
+                        )}
                       </div>
                       {post.rating && (
                         <div className="flex items-center">

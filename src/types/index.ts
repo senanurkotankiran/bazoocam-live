@@ -5,6 +5,7 @@ export interface BlogPost {
   content: Record<string, string>;
   description: Record<string, string>;
   imageUrl?: string;
+  author?: string; // Blog yazarı
   categoryId?: any;
   status: 'draft' | 'published';
   rating?: {
@@ -36,6 +37,7 @@ export interface LocalizedBlogPost {
   content: string; // Single locale content
   description: string; // Single locale content
   imageUrl?: string;
+  author?: string; // Blog yazarı
   status: 'draft' | 'published';
   rating?: {
     stars: number;

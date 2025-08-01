@@ -80,6 +80,7 @@ export async function GET(
       description: post.description[locale] || post.description['en'] || '',
       content: post.content[locale] || post.content['en'] || '',
       imageUrl: post.imageUrl,
+      author: post.author, // Blog yazarı
       createdAt: post.createdAt,
       updatedAt: post.updatedAt,
       rating: {

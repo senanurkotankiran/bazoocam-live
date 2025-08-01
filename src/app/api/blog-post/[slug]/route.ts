@@ -29,6 +29,7 @@ async function getPost(slug: string, locale: string): Promise<LocalizedBlogPost 
       _id: post._id?.toString() || '',
       slug: post.slug,
       imageUrl: post.imageUrl,
+      author: post.author, // Blog yazarı
       status: post.status,
       rating: post.rating ? {
         stars: post.rating.stars || 4,

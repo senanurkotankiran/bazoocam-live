@@ -82,7 +82,7 @@ async function getPublishedPostsForLocale(locale: string) {
         { [`content.${locale}`]: { $exists: true, $ne: "" } }
       ]
     })
-      .select('title description content imageUrl slug createdAt updatedAt rating')
+      .select('title description content imageUrl slug createdAt updatedAt rating author')
       .sort({ createdAt: -1 })
       .lean();
     
