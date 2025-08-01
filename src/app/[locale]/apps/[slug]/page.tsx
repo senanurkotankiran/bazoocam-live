@@ -19,6 +19,21 @@ interface Props {
   };
 }
 
+function cleanLinksFromHtml(html: string) {
+  // Server-side ve client-side'da çalışacak regex tabanlı çözüm
+  return html.replace(
+    /<a([^>]*?)>/gi,
+    (match, attributes) => {
+      // target ve rel özelliklerini kaldır
+      let cleanedAttributes = attributes
+        .replace(/\s*target\s*=\s*["'][^"']*["']/gi, '') // target="..." veya target='...'
+        .replace(/\s*rel\s*=\s*["'][^"']*["']/gi, ''); // rel="..." veya rel='...'
+      
+      return `<a${cleanedAttributes}>`;
+    }
+  );
+}
+
 // Add revalidate for caching
 
 async function getPost(slug: string, locale: string): Promise<LocalizedBlogPost | null> {
@@ -227,7 +242,7 @@ export default async function BlogPostPage({ params }: Props) {
 
               {/* Main Content */}
               <div className="prose prose-sm max-w-none mb-12 leading-relaxed">
-                <div dangerouslySetInnerHTML={{ __html: content }} />
+                <div dangerouslySetInnerHTML={{ __html: cleanLinksFromHtml(content) }} />
               </div>
 
               {/* Pros and Cons */}

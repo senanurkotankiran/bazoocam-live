@@ -59,19 +59,18 @@ export default function QuillEditor({
 
   // Mevcut içerikteki linklerden target ve rel özelliklerini temizle
   const cleanLinks = (content: string) => {
-    if (typeof window !== 'undefined') {
-      const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = content;
-      
-      const links = tempDiv.querySelectorAll('a');
-      links.forEach(link => {
-        link.removeAttribute('target');
-        link.removeAttribute('rel');
-      });
-      
-      return tempDiv.innerHTML;
-    }
-    return content;
+    // Server-side ve client-side'da çalışacak regex tabanlı çözüm
+    return content.replace(
+      /<a([^>]*?)>/gi,
+      (match, attributes) => {
+        // target ve rel özelliklerini kaldır
+        let cleanedAttributes = attributes
+          .replace(/\s*target\s*=\s*["'][^"']*["']/gi, '') // target="..." veya target='...'
+          .replace(/\s*rel\s*=\s*["'][^"']*["']/gi, ''); // rel="..." veya rel='...'
+        
+        return `<a${cleanedAttributes}>`;
+      }
+    );
   };
 
   // Quill modules configuration

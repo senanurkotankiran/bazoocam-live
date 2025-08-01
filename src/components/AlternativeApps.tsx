@@ -14,6 +14,20 @@ export default async function AlternativeApps({ alternatives, alternativesDescri
     ? alternativesDescription 
     : (alternativesDescription?.[locale] || alternativesDescription?.['en'] || '');
   
+    function cleanLinksFromHtml(html: string) {
+      // Server-side ve client-side'da çalışacak regex tabanlı çözüm
+      return html.replace(
+        /<a([^>]*?)>/gi,
+        (match, attributes) => {
+          // target ve rel özelliklerini kaldır
+          let cleanedAttributes = attributes
+            .replace(/\s*target\s*=\s*["'][^"']*["']/gi, '') // target="..." veya target='...'
+            .replace(/\s*rel\s*=\s*["'][^"']*["']/gi, ''); // rel="..." veya rel='...'
+          
+          return `<a${cleanedAttributes}>`;
+        }
+      );
+    }
   return (
     <section className="mb-12">
       <h2 className="text-xl font-bold mb-6">{t('alternativeApplicationsTitle')}</h2>
@@ -40,7 +54,7 @@ export default async function AlternativeApps({ alternatives, alternativesDescri
               </h3>
               <div 
                 className="prose prose-sm max-w-none text-gray-800 leading-relaxed antialiased"
-                dangerouslySetInnerHTML={{ __html: description }}
+                dangerouslySetInnerHTML={{ __html: cleanLinksFromHtml(description) }}
               />
             </div>
           );
