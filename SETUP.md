@@ -65,14 +65,14 @@ MONGODB_URI=mongodb://localhost:27017/bazoocam-live
 # Cloud MongoDB için (Atlas)
 # MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/bazoocam-live
 
-NEXTAUTH_URL=http://localhost:3000
+BAZOOCAM_LIVE_NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=super-gizli-anahtar-buraya-yazin
 
 # Admin kullanıcı bilgileri
 ADMIN_EMAIL=admin@bazoocam.live
 ADMIN_PASSWORD=admin123
 
-NEXT_PUBLIC_APP_URL=http://localhost:3000
+BAZOOCAM_LIVE_NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
 ### 5. İlk Admin Kullanıcısını Oluşturun

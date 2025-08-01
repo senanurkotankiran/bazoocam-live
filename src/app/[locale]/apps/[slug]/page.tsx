@@ -46,7 +46,7 @@ async function getPost(slug: string, locale: string): Promise<LocalizedBlogPost 
   else {
     console.log('❌❌[DB HIT] /api/blog-post');
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const baseUrl = process.env.BAZOOCAM_LIVE_NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
     const response = await fetch(`${baseUrl}/api/blog-post/${slug}?locale=${locale}`,{
       cache: 'no-store'
     });
@@ -79,7 +79,7 @@ async function getRandomBlogPosts(locale: string, currentSlug: string, limit: nu
   else {
     console.log('❌❌[DB HIT] /api/random-blog-posts');
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const baseUrl = process.env.BAZOOCAM_LIVE_NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
     const response = await fetch(
       `${baseUrl}/api/random-blog-posts?locale=${locale}&currentSlug=${currentSlug}&limit=${limit}`,
       {

@@ -56,7 +56,7 @@ async function getCategoryData(slug: string, locale: string, page: number = 1) {
   } else {
     console.log('❌❌[DB HIT] /api/blog-posts-by-category');
     try {
-        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+        const baseUrl = process.env.BAZOOCAM_LIVE_NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
         const response = await fetch(
           `${baseUrl}/api/blog-posts-by-category/${slug}?locale=${locale}&page=${page}&limit=12`,
           {

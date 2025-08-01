@@ -39,7 +39,7 @@ cp .env.local.example .env.local
 Edit `.env.local`:
 ```env
 MONGODB_URI=mongodb://localhost:27017/bazoocam-live
-NEXTAUTH_URL=http://localhost:3000
+BAZOOCAM_LIVE_NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=your-super-secret-key
 ADMIN_EMAIL=admin@bazoocam.live
 ADMIN_PASSWORD=admin123
@@ -183,7 +183,7 @@ npm start
 ### Environment Variables (Production)
 ```env
 MONGODB_URI=mongodb+srv://...
-NEXTAUTH_URL=https://yourdomain.com
+BAZOOCAM_LIVE_NEXTAUTH_URL=https://yourdomain.com
 NEXTAUTH_SECRET=production-secret
 ADMIN_EMAIL=admin@yourdomain.com
 ADMIN_PASSWORD=secure-password

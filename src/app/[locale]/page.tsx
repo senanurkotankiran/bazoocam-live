@@ -20,7 +20,7 @@ async function getLatestBlogs(locale: string) {
   else {
     console.log('❌❌[DB HIT] /api/latest-blogs'); // ✅ CACHE MISS
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/latest-blogs`, {
+      const response = await fetch(`${process.env.BAZOOCAM_LIVE_NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/latest-blogs`, {
         cache: 'no-store'
       });
   
@@ -58,7 +58,7 @@ async function getHomepageFAQs(locale: string) {
   }
   else {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/homepage-faqs`, {
+      const response = await fetch(`${process.env.BAZOOCAM_LIVE_NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/homepage-faqs`, {
         cache: 'no-store'
       });
   

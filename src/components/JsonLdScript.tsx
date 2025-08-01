@@ -72,8 +72,8 @@ export default function JsonLdScript({ post, locale }: JsonLdScriptProps) {
       '@type': 'ImageObject',
       'inLanguage': locale === 'en' ? 'en-US' : `${locale}-${locale.toUpperCase()}`,
       '@id': getLocalizedUrl(`/apps/${post.slug}.html#primaryimage`),
-      'url': process.env.NEXT_PUBLIC_APP_URL + post.imageUrl,
-      'contentUrl': process.env.NEXT_PUBLIC_APP_URL + post.imageUrl
+      'url': process.env.BAZOOCAM_LIVE_NEXT_PUBLIC_APP_URL + post.imageUrl,
+      'contentUrl': process.env.BAZOOCAM_LIVE_NEXT_PUBLIC_APP_URL + post.imageUrl
     } : undefined,
     author: {
       '@type': post.author ? 'Person' : 'Organization',

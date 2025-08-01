@@ -17,7 +17,7 @@ export async function fetchActiveLanguages(): Promise<Locale[]> {
   else {
     console.log('❌❌[DB HIT] /api/admin/languages');
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/admin/languages`, {
+      const response = await fetch(`${process.env.BAZOOCAM_LIVE_NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/admin/languages`, {
         cache: 'no-store'
       });
       const result = await response.json();
